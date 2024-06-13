@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: spring_community
+  datasource:
+    url: jdbc:mysql://localhost:3306/community_db?serverTimezone=UTC
+    username: hailey
+    password: gusgml0429
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update  # Production 수준에서는 이 옵션을 반!드!시! none으로 설정해야한다!
+    show-sql: true
+    properties:
+      hibernate:
+        use_sql_comments: true
+        format_sql: true
+server:
+  port: 8081
+logging:
+  level:
+    root: DEBUG
+    org.springframework.beans.factory: info
