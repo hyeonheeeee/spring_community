@@ -15,8 +15,8 @@ spring:
         use_sql_comments: true
         format_sql: true
 server:
-  port: 8081
+  port: 8080
 logging:
   level:
-    root: DEBUG
+    root: INFO
     org.springframework.beans.factory: info

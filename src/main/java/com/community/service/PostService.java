@@ -1,22 +1,17 @@
 package com.community.service;
 
+import com.community.dto.PostDto;
 import com.community.model.Posts;
-import com.community.repository.PostRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
-@Service
-public class PostService {
-    private final PostRepository postRepository;
+public interface PostService {
 
-    @Autowired
-    public PostService(PostRepository postRepository) {
-        this.postRepository = postRepository;
-    }
-
-    public List<Posts> getAllPosts() {
-        return postRepository.findAll();
-    }
+    List<Posts> getAllPosts();
+    void createPost(PostDto postDto, MultipartFile file);
+    Optional<Posts> getPostById(int postId);
+    void updatePost(int postId, PostDto postDto, MultipartFile file);
+    void deletePost(int postId);
 }

@@ -1,5 +1,6 @@
 package com.community.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,5 +36,6 @@ public class Users {
     private String updated_at;
 
     @OneToMany(mappedBy = "users")
+    @JsonManagedReference
     private List<Posts> posts;
 }
