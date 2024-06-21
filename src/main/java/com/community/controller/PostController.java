@@ -1,9 +1,12 @@
 package com.community.controller;
 
+import com.community.dto.CommentDto;
 import com.community.dto.PostDto;
+import com.community.model.Comments;
 import com.community.model.Posts;
 import com.community.response.Response;
 import com.community.service.PostService;
+import com.community.service.PostServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +34,7 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<?> createPost(@RequestPart("post") PostDto postDto,
-                             @RequestPart(value = "file", required = false) MultipartFile file) {
+                                        @RequestPart(value = "file", required = false) MultipartFile file) {
         postService.createPost(postDto, file);
         return Response.createResponse(HttpStatus.CREATED, "write_post_success", null);
     }
@@ -44,8 +47,8 @@ public class PostController {
 
     @PutMapping("/{post_id}")
     public ResponseEntity<?> updatePost(@PathVariable int post_id,
-                             @RequestPart("post") PostDto postDto,
-                             @RequestPart(value = "file", required = false) MultipartFile file) {
+                                        @RequestPart("post") PostDto postDto,
+                                        @RequestPart(value = "file", required = false) MultipartFile file) {
         postService.updatePost(post_id, postDto, file);
         return Response.createResponse(HttpStatus.OK, "update_post_success", post_id);
     }
@@ -55,5 +58,36 @@ public class PostController {
         postService.deletePost(post_id);
         return Response.createResponse(HttpStatus.OK, "delete_post_success", null);
     }
+
+    @GetMapping("/{post_id}/comments")
+    public ResponseEntity<?> getPostComments(@PathVariable int post_id) {
+        List<Comments> comments = postService.getPostComments(post_id);
+        return Response.createResponse(HttpStatus.OK, null, comments);
+    }
+
+    @PostMapping("/{post_id}/comments")
+    public ResponseEntity<?> createComment(@PathVariable int post_id, @RequestPart("comment") CommentDto commentDto) {
+        commentDto.setPost_id(post_id);
+        commentDto.setUser_id(1);
+        postService.createComment(commentDto);
+        return Response.createResponse(HttpStatus.CREATED, "write_comment_success", null);
+    }
+
+    @PutMapping("/{post_id}/comments/{comment_id}")
+    public ResponseEntity<?> updateComment(@PathVariable int post_id, @PathVariable int comment_id, @RequestPart("comment") CommentDto commentDto) {
+        commentDto.setPost_id(post_id);
+        commentDto.setId(comment_id);
+        commentDto.setUser_id(1);
+        postService.updateComment(commentDto);
+        return Response.createResponse(HttpStatus.OK, "update_comment_success", null);
+    }
+
+    @DeleteMapping("/{post_id}/comments/{comment_id}")
+    public ResponseEntity<?> deleteComment(@PathVariable int post_id, @PathVariable int comment_id) {
+        postService.deleteComment(post_id, comment_id);
+        return Response.createResponse(HttpStatus.OK, "delete_comment_success", null);
+    }
+
+
 
 }

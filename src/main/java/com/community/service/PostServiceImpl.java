@@ -1,6 +1,9 @@
 package com.community.service;
 
+import com.community.dto.CommentDto;
 import com.community.dto.PostDto;
+import com.community.model.Comments;
+import com.community.repository.CommentRepository;
 import com.community.repository.PostRepository;
 import com.community.repository.UserRepository;
 import com.community.model.Posts;
@@ -18,11 +21,13 @@ import java.util.Optional;
 public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
 
     @Autowired
-    public PostServiceImpl(PostRepository postRepository, UserRepository userRepository) {
+    public PostServiceImpl(PostRepository postRepository, UserRepository userRepository, CommentRepository commentRepository) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
+        this.commentRepository = commentRepository;
     }
 
     @Override
@@ -52,6 +57,45 @@ public class PostServiceImpl implements PostService {
     @Override
     public void deletePost(int postId) {
         postRepository.deleteById((long) postId);
+    }
+
+    @Override
+    public List<Comments> getPostComments(int postId) {
+        return commentRepository.findByPostsId(postId);
+    }
+
+    @Override
+    public void createComment(CommentDto commentDto) {
+        Posts posts = postRepository.findById((long) commentDto.getPost_id())
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        //유저 수정해야함
+        Users users = userRepository.findById(commentDto.getUser_id())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Comments comments = commentDto.toEntity(posts, users);
+        commentRepository.save(comments);
+    }
+
+    @Override
+    public void updateComment(CommentDto commentDto) {
+        Posts posts = postRepository.findById((long) commentDto.getPost_id())
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        //유저 수정해야함
+        Users users = userRepository.findById(commentDto.getUser_id())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Comments comments = commentRepository.findById(commentDto.getId())
+                .orElseThrow(() -> new RuntimeException("Comment not found"));
+
+        Comments updateComment = commentDto.toEntity(posts, users, comments);
+        commentRepository.save(updateComment);
+    }
+
+    @Override
+    public void deleteComment(int postId, int commentId) {
+        commentRepository.deleteById(commentId);
     }
 
     private Posts convertToEntity(PostDto postDto, MultipartFile file) {

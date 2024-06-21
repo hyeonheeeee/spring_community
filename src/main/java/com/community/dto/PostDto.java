@@ -1,5 +1,6 @@
 package com.community.dto;
 
+import com.community.model.Posts;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,4 +17,6 @@ public class PostDto {
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
     private int user_id;
+
+
 }
