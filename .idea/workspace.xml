@@ -5,12 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3b545178-9541-4ee2-8bc9-9aec623bd24e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/community/dto/CommentDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/community/model/Comments.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/community/repository/CommentRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/community/controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/community/controller/PostController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/community/dto/PostDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/community/dto/PostDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/community/model/Posts.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/community/model/Posts.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/community/repository/PostRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/community/repository/PostRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/community/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/community/service/PostService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/community/service/PostServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/community/service/PostServiceImpl.java" afterDir="false" />
     </list>
@@ -159,7 +158,8 @@
       <workItem from="1718720131388" duration="136000" />
       <workItem from="1718720274260" duration="103000" />
       <workItem from="1718720384252" duration="21596000" />
-      <workItem from="1718845687962" duration="29380000" />
+      <workItem from="1718845687962" duration="34460000" />
+      <workItem from="1719140397951" duration="3143000" />
     </task>
     <servers />
   </component>

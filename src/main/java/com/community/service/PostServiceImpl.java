@@ -36,27 +36,44 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void createPost(PostDto postDto, MultipartFile file) {
-        Posts posts = convertToEntity(postDto, file);
-        postRepository.save(posts);
+    public void createPost(PostDto postDto, MultipartFile file) throws IOException {
+        Users user = userRepository.findById(postDto.getUser_id())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        String imagePath = null;
+        if (file != null && !file.isEmpty()) {
+            imagePath = saveImage(file);
+        }
+
+        Posts post = postDto.toEntity(user, imagePath);
+        postRepository.save(post);
     }
 
     @Override
     public Optional<Posts> getPostById(int postId) {
-        return postRepository.findById((long)postId);
+        return postRepository.findById(postId);
     }
 
     @Override
-    public void updatePost(int postId, PostDto postDto, MultipartFile file) {
-        Posts posts = postRepository.findById((long) postId)
+    public void updatePost(int postId, PostDto postDto, MultipartFile file) throws IOException {
+        Posts posts = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
-        updateEntity(posts, postDto, file);
+
+        Users users = userRepository.findById(postDto.getUser_id())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        String imagePath = posts.getPost_image();
+        if (imagePath != null && !imagePath.isEmpty()) {
+            imagePath = saveImage(file);
+        }
+
+        postDto.toEntity(users, posts, imagePath);
         postRepository.save(posts);
     }
 
     @Override
     public void deletePost(int postId) {
-        postRepository.deleteById((long) postId);
+        postRepository.deleteById(postId);
     }
 
     @Override
@@ -66,7 +83,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void createComment(CommentDto commentDto) {
-        Posts posts = postRepository.findById((long) commentDto.getPost_id())
+        Posts posts = postRepository.findById(commentDto.getPost_id())
                 .orElseThrow(() -> new RuntimeException("Post not found"));
 
         //유저 수정해야함
@@ -79,7 +96,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void updateComment(CommentDto commentDto) {
-        Posts posts = postRepository.findById((long) commentDto.getPost_id())
+        Posts posts = postRepository.findById(commentDto.getPost_id())
                 .orElseThrow(() -> new RuntimeException("Post not found"));
 
         //유저 수정해야함
@@ -98,64 +115,15 @@ public class PostServiceImpl implements PostService {
         commentRepository.deleteById(commentId);
     }
 
-    private Posts convertToEntity(PostDto postDto, MultipartFile file) {
-        Posts posts = new Posts();
-        posts.setTitle(postDto.getTitle());
-        posts.setDetail(postDto.getDetail());
-        posts.setLikes(postDto.getLikes());
-        posts.setHits(postDto.getHits());
-        posts.setCreated_at(postDto.getCreated_at());
-        posts.setUpdated_at(postDto.getUpdated_at());
-
-        //이미지 저장로직
-        if (file != null && !file.isEmpty()) {
-            try {
-                String fileName = file.getOriginalFilename();
-                String uploadDir = new File("src/main/resources/static/images/").getAbsolutePath();
-                File uploadDirFile = new File(uploadDir);
-                if (!uploadDirFile.exists()) {
-                    uploadDirFile.mkdirs();
-                }
-                file.transferTo(new File(uploadDir + File.separator + fileName));
-                posts.setPost_image(fileName);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+    public String saveImage(MultipartFile imageFile) throws IOException {
+        String fileName = imageFile.getOriginalFilename();
+        String uploadDir = new File("src/main/resources/static/images/").getAbsolutePath();
+        File uploadDirFile = new File(uploadDir);
+        if (!uploadDirFile.exists()) {
+            uploadDirFile.mkdirs();
         }
-
-        Users user = userRepository.findById(postDto.getUser_id())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        posts.setUsers(user);
-
-        return posts;
-    }
-
-    private void updateEntity(Posts posts, PostDto postDto, MultipartFile file) {
-        posts.setTitle(postDto.getTitle());
-        posts.setDetail(postDto.getDetail());
-        posts.setLikes(postDto.getLikes());
-        posts.setHits(postDto.getHits());
-        posts.setUpdated_at(postDto.getUpdated_at()); // updated_at만 업데이트
-
-        // 이미지 저장로직
-        if (file != null && !file.isEmpty()) {
-            try {
-                String fileName = file.getOriginalFilename();
-                String uploadDir = new File("src/main/resources/static/images/").getAbsolutePath();
-                File uploadDirFile = new File(uploadDir);
-                if (!uploadDirFile.exists()) {
-                    uploadDirFile.mkdirs();
-                }
-                file.transferTo(new File(uploadDir + File.separator + fileName));
-                posts.setPost_image(fileName);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        Users user = userRepository.findById(postDto.getUser_id())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        posts.setUsers(user);
+        imageFile.transferTo(new File(uploadDir + File.separator + fileName));
+        return fileName;
     }
 
 }

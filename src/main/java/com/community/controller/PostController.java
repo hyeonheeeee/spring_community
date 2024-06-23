@@ -6,13 +6,13 @@ import com.community.model.Comments;
 import com.community.model.Posts;
 import com.community.response.Response;
 import com.community.service.PostService;
-import com.community.service.PostServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,7 +34,8 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<?> createPost(@RequestPart("post") PostDto postDto,
-                                        @RequestPart(value = "file", required = false) MultipartFile file) {
+                                        @RequestPart(value = "file", required = false) MultipartFile file) throws IOException {
+        postDto.setUser_id(1);
         postService.createPost(postDto, file);
         return Response.createResponse(HttpStatus.CREATED, "write_post_success", null);
     }
@@ -48,7 +49,8 @@ public class PostController {
     @PutMapping("/{post_id}")
     public ResponseEntity<?> updatePost(@PathVariable int post_id,
                                         @RequestPart("post") PostDto postDto,
-                                        @RequestPart(value = "file", required = false) MultipartFile file) {
+                                        @RequestPart(value = "file", required = false) MultipartFile file) throws IOException {
+        postDto.setUser_id(1);
         postService.updatePost(post_id, postDto, file);
         return Response.createResponse(HttpStatus.OK, "update_post_success", post_id);
     }

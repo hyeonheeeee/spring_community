@@ -2,7 +2,9 @@ package com.community.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -12,7 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "posts")
 @Getter
-@Setter
+@NoArgsConstructor
 public class Posts {
 
     @Id
@@ -47,14 +49,34 @@ public class Posts {
     @JsonBackReference
     private Users users;
 
-    @PrePersist
-    protected void onCreate() {
-        created_at = LocalDateTime.now();
+//    @PrePersist
+//    protected void onCreate() {
+//        created_at = LocalDateTime.now();
+//    }
+//
+//    @PreUpdate
+//    protected void onUpdate() {
+//        updated_at = LocalDateTime.now();
+//    }
+
+    @Builder
+    public Posts(int id, String title, String detail, String post_image, int likes, LocalDateTime created_at, int hits, LocalDateTime updated_at, Users users) {
+        this.id = id;
+        this.title = title;
+        this.detail = detail;
+        this.post_image = post_image;
+        this.likes = likes;
+        this.created_at = created_at;
+        this.hits = hits;
+        this.updated_at = updated_at;
+        this.users = users;
     }
 
-    @PreUpdate
-    protected void onUpdate() {
-        updated_at = LocalDateTime.now();
+    public void updatePost(String title, String detail, String post_image) {
+        this.title = title;
+        this.detail = detail;
+        this.post_image = post_image;
+        this.updated_at = LocalDateTime.now();
     }
 }
 
