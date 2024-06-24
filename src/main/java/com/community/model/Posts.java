@@ -49,16 +49,6 @@ public class Posts {
     @JsonBackReference
     private Users users;
 
-//    @PrePersist
-//    protected void onCreate() {
-//        created_at = LocalDateTime.now();
-//    }
-//
-//    @PreUpdate
-//    protected void onUpdate() {
-//        updated_at = LocalDateTime.now();
-//    }
-
     @Builder
     public Posts(int id, String title, String detail, String post_image, int likes, LocalDateTime created_at, int hits, LocalDateTime updated_at, Users users) {
         this.id = id;

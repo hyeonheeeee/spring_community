@@ -55,8 +55,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void updatePost(int postId, PostDto postDto, MultipartFile file) throws IOException {
-        Posts posts = postRepository.findById(postId)
+    public void updatePost(PostDto postDto, MultipartFile file) throws IOException {
+        Posts posts = postRepository.findById(postDto.getId())
                 .orElseThrow(() -> new RuntimeException("Post not found"));
 
         Users users = userRepository.findById(postDto.getUser_id())
@@ -115,14 +115,15 @@ public class PostServiceImpl implements PostService {
         commentRepository.deleteById(commentId);
     }
 
-    public String saveImage(MultipartFile imageFile) throws IOException {
-        String fileName = imageFile.getOriginalFilename();
+    public String saveImage(MultipartFile file) throws IOException {
+        String fileName = file.getOriginalFilename();
+
         String uploadDir = new File("src/main/resources/static/images/").getAbsolutePath();
         File uploadDirFile = new File(uploadDir);
         if (!uploadDirFile.exists()) {
             uploadDirFile.mkdirs();
         }
-        imageFile.transferTo(new File(uploadDir + File.separator + fileName));
+        file.transferTo(new File(uploadDir + File.separator + fileName));
         return fileName;
     }
 

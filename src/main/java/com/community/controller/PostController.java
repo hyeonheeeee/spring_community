@@ -51,7 +51,8 @@ public class PostController {
                                         @RequestPart("post") PostDto postDto,
                                         @RequestPart(value = "file", required = false) MultipartFile file) throws IOException {
         postDto.setUser_id(1);
-        postService.updatePost(post_id, postDto, file);
+        postDto.setId(post_id);
+        postService.updatePost(postDto, file);
         return Response.createResponse(HttpStatus.OK, "update_post_success", post_id);
     }
 

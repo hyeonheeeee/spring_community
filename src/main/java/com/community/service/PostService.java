@@ -18,7 +18,7 @@ public interface PostService {
 
     Optional<Posts> getPostById(int postId);
 
-    void updatePost(int postId, PostDto postDto, MultipartFile file) throws IOException;
+    void updatePost(PostDto postDto, MultipartFile file) throws IOException;
 
     void deletePost(int postId);
 

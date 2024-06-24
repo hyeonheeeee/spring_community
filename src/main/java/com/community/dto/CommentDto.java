@@ -31,6 +31,7 @@ public class CommentDto {
 
     public Comments toEntity(Posts posts, Users users, Comments comment) {
         comment.updateDetail(this.detail);
+
         return comment;
     }
 
