@@ -20,3 +20,4 @@ logging:
   level:
     root: INFO
     org.springframework.beans.factory: info
+    org.springframework.security: DEBUG

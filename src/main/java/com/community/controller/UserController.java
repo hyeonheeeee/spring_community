@@ -1,11 +1,13 @@
 package com.community.controller;
 
+import com.community.dto.CustomUserDetails;
 import com.community.dto.UserDto;
 import com.community.response.Response;
 import com.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,7 +32,14 @@ public class UserController {
     }
 
 //    @GetMapping("/login")
-//    public ResponseEntity<?> login() {
-//        return Response.createResponse(HttpStatus.OK, "login_success", null);
+//    public ResponseEntity<?> login(@RequestBody UserDto userDto) {
+//        UserDto userInfo = userService.login(userDto);
+//        return Response.createResponse(HttpStatus.OK, "login_success", userInfo);
+//    }
+
+//    @GetMapping("/login")
+//    public ResponseEntity<?> login(@RequestBody UserDto userDto) {
+//        UserDetails userInfo = userService.login(userDto);
+//        return Response.createResponse(HttpStatus.OK, "login_success", userInfo);
 //    }
 }
