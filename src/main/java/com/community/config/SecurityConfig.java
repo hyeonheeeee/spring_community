@@ -1,5 +1,7 @@
 package com.community.config;
 
+import com.community.jwt.JWTFilter;
+import com.community.jwt.JWTUtil;
 import com.community.jwt.LoginFilter;
 import com.community.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
@@ -21,10 +23,12 @@ public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
     private final AuthenticationConfiguration authenticationConfiguration;
+    private final JWTUtil jwtUtil;
 
-    public SecurityConfig(CustomUserDetailsService userDetailsService, AuthenticationConfiguration authenticationConfiguration) {
+    public SecurityConfig(CustomUserDetailsService userDetailsService, AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil) {
         this.userDetailsService = userDetailsService;
         this.authenticationConfiguration = authenticationConfiguration;
+        this.jwtUtil = jwtUtil;
     }
 
     @Bean
@@ -47,7 +51,8 @@ public class SecurityConfig {
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(new LoginFilter(authenticationManager(authenticationConfiguration)), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class)
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

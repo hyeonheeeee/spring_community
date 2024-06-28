@@ -9,26 +9,26 @@ import java.util.Collections;
 
 public class CustomUserDetails implements UserDetails {
 
-    private final UserDto user;
+    private final UserDto userDto;
 
-    public CustomUserDetails(UserDto user) {
-        this.user = user;
+    public CustomUserDetails(UserDto userDto) {
+        this.userDto = userDto;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // 모든 사용자에게 기본 권한을 부여합니다.
+        // 모든 사용자에게 기본 권한 부여
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return userDto.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getEmail();
+        return userDto.getEmail();
     }
 
     @Override
