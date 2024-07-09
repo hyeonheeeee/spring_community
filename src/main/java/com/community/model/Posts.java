@@ -45,7 +45,7 @@ public class Posts {
     private LocalDateTime updated_at;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_email")
     @JsonBackReference
     private Users users;
 

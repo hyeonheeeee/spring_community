@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Date;
 
 @Repository
 public class UserDao {
@@ -29,11 +31,29 @@ public class UserDao {
         return jdbcTemplate.queryForObject(sql, new Object[]{email}, new UserRowMapper());
     }
 
+    public void addRefreshToken(String username, String refresh, long expired_at) {
+        String sql = "INSERT INTO sessions(user_email, refresh, expired_at) VALUES (?, ?, ?)";
+        Timestamp expiredAt = new Timestamp(System.currentTimeMillis() + expired_at);
+        jdbcTemplate.update(sql, username, refresh, expiredAt);
+    }
+
+    public boolean existsByRefresh(String userEmail, String refresh) {
+        String sql = "SELECT COUNT(*) FROM sessions WHERE user_email = ? AND refresh = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, new Object[]{userEmail, refresh}, Integer.class);
+        return count != null && count > 0;
+    }
+
+    public void deleteByRefresh(String userEmail, String refresh) {
+        String sql = "DELETE FROM sessions WHERE user_email = ? AND refresh = ?";
+        jdbcTemplate.update(sql, userEmail, refresh);
+    }
+
+
+
     private static class UserRowMapper implements RowMapper<UserDto> {
         @Override
         public UserDto mapRow(ResultSet rs, int rowNum) throws SQLException {
             UserDto user = new UserDto();
-            user.setId(rs.getInt("id"));
             user.setEmail(rs.getString("email"));
             user.setPassword(rs.getString("password"));
             user.setNickname(rs.getString("nickname"));
