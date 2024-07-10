@@ -19,7 +19,7 @@ public class PostDto {
     private int hits;
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
-    private int user_id;
+    private String user_email;
 
     public Posts toEntity(Users users, String imagePath) {
         return Posts.builder()

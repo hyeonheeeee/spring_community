@@ -9,6 +9,9 @@ import com.community.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,7 +38,20 @@ public class PostController {
     @PostMapping
     public ResponseEntity<?> createPost(@RequestPart("post") PostDto postDto,
                                         @RequestPart(value = "file", required = false) MultipartFile file) throws IOException {
-        postDto.setUser_id(1);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = null;
+
+        if (authentication != null && authentication.isAuthenticated()) {
+            Object principal = authentication.getPrincipal();
+            if (principal instanceof UserDetails) {
+                email = ((UserDetails) principal).getUsername();
+            } else {
+                email = principal.toString();
+            }
+
+        }
+
+        postDto.setUser_email(email);
         postService.createPost(postDto, file);
         return Response.createResponse(HttpStatus.CREATED, "write_post_success", null);
     }
@@ -50,7 +66,7 @@ public class PostController {
     public ResponseEntity<?> updatePost(@PathVariable int post_id,
                                         @RequestPart("post") PostDto postDto,
                                         @RequestPart(value = "file", required = false) MultipartFile file) throws IOException {
-        postDto.setUser_id(1);
+        postDto.setUser_email("hi");
         postDto.setId(post_id);
         postService.updatePost(postDto, file);
         return Response.createResponse(HttpStatus.OK, "update_post_success", post_id);

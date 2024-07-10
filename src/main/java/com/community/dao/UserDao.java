@@ -48,8 +48,6 @@ public class UserDao {
         jdbcTemplate.update(sql, userEmail, refresh);
     }
 
-
-
     private static class UserRowMapper implements RowMapper<UserDto> {
         @Override
         public UserDto mapRow(ResultSet rs, int rowNum) throws SQLException {

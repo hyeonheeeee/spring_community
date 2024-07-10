@@ -1,13 +1,11 @@
 package com.community.controller;
 
-import com.community.dto.CustomUserDetails;
 import com.community.dto.UserDto;
 import com.community.response.Response;
 import com.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 

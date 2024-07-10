@@ -37,7 +37,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void createPost(PostDto postDto, MultipartFile file) throws IOException {
-        Users user = userRepository.findById(postDto.getUser_id())
+        Users users = userRepository.findByEmail(postDto.getUser_email())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         String imagePath = null;
@@ -45,7 +45,7 @@ public class PostServiceImpl implements PostService {
             imagePath = saveImage(file);
         }
 
-        Posts post = postDto.toEntity(user, imagePath);
+        Posts post = postDto.toEntity(users, imagePath);
         postRepository.save(post);
     }
 
@@ -59,7 +59,7 @@ public class PostServiceImpl implements PostService {
         Posts posts = postRepository.findById(postDto.getId())
                 .orElseThrow(() -> new RuntimeException("Post not found"));
 
-        Users users = userRepository.findById(postDto.getUser_id())
+        Users users = userRepository.findByEmail(postDto.getUser_email())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         String imagePath = posts.getPost_image();
